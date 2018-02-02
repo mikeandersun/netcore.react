@@ -1,4 +1,2 @@
-# DotNetCore.Vue
-Source code and sample application on integrating vue.js with ASP.NET Core MVC
-
-
+# DotNetCore.React
+Source code and sample application on integrating react.js with ASP.NET Core MVC

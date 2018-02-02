@@ -6,37 +6,21 @@ const prod = process.argv.indexOf('-p') !== -1;
 
 
 module.exports = {
-    entry: {
-        // Output a "home.js" file from the "home-page.ts" file
-        styles: './styles.js',
-        home: './Scripts/home/home-page.ts',
-        // Output a "contact.js" file from the "contact-page.ts" file
-        contact: './Scripts/contact/contact-page.ts'
-    },
-    // Enable sourcemaps for debugging webpack's output.
-    devtool: "source-map",
-    // Make sure Webpack picks up the .ts files
-    resolve: {
-        extensions: [".ts", ".tsx", '.js', '.vue','css','scss', '.json'],
-        alias: {
-            'vue$': 'vue/dist/vue.esm.js'
-        }
-    },
+  
     module: {
         rules: [
-
-            // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
+            { test: /\.tsx?$/, use:[ "awesome-typescript-loader" ]},
             {
-                test: /\.tsx?$/,
-                loader: "awesome-typescript-loader"
+                test: /\.(js|jsx)$/,
+                exclude: /node_modules/,
+                use: [
+                    'babel-loader'
+                ]//,
+                //include: sourcePath
             },
-
             // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
             { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
             ,
-           
-
-            
             {
                 test: /\.css$/,
                 use: ExtractTextPlugin.extract({
@@ -84,7 +68,7 @@ module.exports = {
         },
         // Use a plugin which will move all common code into a "vendor" file
         new webpack.optimize.CommonsChunkPlugin({
-            name: 'vendor'
+            name: 'vendor', filename: "vendor.js", Infinity
         })
         , new ExtractTextPlugin({
             filename: "styles.css",
@@ -93,6 +77,25 @@ module.exports = {
         })
     ],
 
+  
+    // Enable sourcemaps for debugging webpack's output.
+    devtool: "source-map",
+    // Make sure Webpack picks up the .ts files
+    resolve: {
+        extensions: [".ts", ".tsx", '.js', 'jsx', '.vue', 'css', 'scss', '.json'],
+        alias: {
+            //'vue$': 'vue/dist/vue.esm.js'
+        }
+    },
+
+    entry: {
+        // Output a "home.js" file from the "home-page.ts" file
+        styles: './styles.js',
+        vendor: './Scripts/main.vendor.ts',
+        home: './Scripts/home/home-page.tsx' //,
+        //// Output a "contact.js" file from the "contact-page.ts" file
+        //contact: './Scripts/contact/contact-page.jsx'
+    },
     output: {
         // The format for the outputted files
         filename: (prod) ? "[name].[chunkhash].js" : "[name].js",
@@ -100,8 +103,8 @@ module.exports = {
         path: path.resolve(__dirname, 'wwwroot/')
     },
 
-     externals: {
-        "react": "React",
-        "react-dom": "ReactDOM"
-    }
+    // externals: {
+    //    "react": "React",
+    //    "react-dom": "ReactDOM"
+    //}
 };
